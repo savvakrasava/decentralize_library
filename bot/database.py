@@ -1,31 +1,13 @@
-import sqlite3
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from bot.models import Base  #User, Book  # Убедитесь, что этот импорт соответствует расположению вашего файла models.py
 
+DATABASE_URL = "sqlite:///library.db"  # Используйте путь к вашей базе данных
 DATABASE_NAME = 'library.db'
 
-connection = sqlite3.connect(DATABASE_NAME)
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-with connection:
-    connection.execute("""
-        CREATE TABLE IF NOT EXISTS books (
-            id INTEGER PRIMARY KEY,
-            title TEXT NOT NULL,
-            author TEXT NOT NULL
-        );
-    """)
-    connection.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY,
-            username TEXT NOT NULL
-        );
-    """)
-    connection.execute("""
-        CREATE TABLE IF NOT EXISTS transactions (
-            id INTEGER PRIMARY KEY,
-            user_id INTEGER NOT NULL,
-            book_id INTEGER NOT NULL,
-            borrow_date DATE NOT NULL,
-            return_date DATE,
-            FOREIGN KEY (user_id) REFERENCES users (id),
-            FOREIGN KEY (book_id) REFERENCES books (id)
-        );
-    """)
+def init_db():
+    Base.metadata.create_all(bind=engine)
+
