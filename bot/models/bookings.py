@@ -20,5 +20,6 @@ class Bookings(Base):
     last_updated_ts = Column(TIMESTAMP, nullable=False, default=func.now())
     
 
-    book = relationship("Book")
-    borrower = relationship("User")
+    book = relationship("Book", foreign_keys=[book_key])
+    from_user = relationship("User", foreign_keys=[from_user_key])
+    to_user = relationship("User", foreign_keys=[to_user_key])

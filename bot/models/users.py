@@ -20,6 +20,3 @@ class User(Base):
     city =  Column(String, nullable=True)
 
 
-# Подключение к базе данных (для создания таблиц)
-#engine = create_engine('sqlite:///library.db')
-#Base.metadata.create_all(engine)
